@@ -1,0 +1,5 @@
+C:\Users\luvee\Documents\reimagined-octo-barnacle\cmcs\bin\Debug\CMCS.dll
+C:\Users\luvee\Documents\reimagined-octo-barnacle\cmcs\bin\Debug\CMCS.pdb
+C:\Users\luvee\Documents\reimagined-octo-barnacle\cmcs\obj\Debug\CMCS.csprojResolveAssemblyReference.cache
+C:\Users\luvee\Documents\reimagined-octo-barnacle\cmcs\obj\Debug\CMCS.dll
+C:\Users\luvee\Documents\reimagined-octo-barnacle\cmcs\obj\Debug\CMCS.pdb

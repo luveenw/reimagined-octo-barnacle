@@ -1,3 +1,5 @@
+NOTE - Please refer SalesQueries.sql for a complete, executable version of these queries, including instructions to install any prerequisite software that was used for arriving at the queries, plus the DDL to create the database schema and insert table data.
+
 Requirement 9
 
 First answer:
