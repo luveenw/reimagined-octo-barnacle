@@ -4,6 +4,9 @@
 --
 -- Compendium of responses listed in SQL.txt, except in a .sql file instead.
 
+USE CMCS_Sales;
+GO
+
 --
 -- Requirement 7 / Requirement 9
 --
