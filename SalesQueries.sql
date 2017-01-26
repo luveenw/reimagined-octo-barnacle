@@ -28,19 +28,19 @@ USE CMCS_Sales;
 GO
 
 CREATE TABLE Salesperson(
-	SalespersonID int PRIMARY KEY NOT NULL,
+	SalespersonID int NOT NULL PRIMARY KEY,
 	Name varchar(40) NOT NULL,
 	Age int NOT NULL,
 	Salary money NOT NULL
 );
 
 CREATE TABLE Customer(
-	CustomerID int PRIMARY KEY NOT NULL,
+	CustomerID int NOT NULL PRIMARY KEY,
 	Name varchar(40) NOT NULL
 );
 
 CREATE TABLE Orders(
-	OrderID int PRIMARY KEY NOT NULL,
+	OrderID int NOT NULL PRIMARY KEY,
 	OrderDate date NOT NULL,
 	CustomerID int NOT NULL,
 	SalespersonID int NOT NULL,
@@ -53,6 +53,11 @@ CREATE TABLE Orders(
 	REFERENCES Salesperson(SalespersonID)
 	ON DELETE CASCADE
 );
+
+-- Create table indexes to support faster lookups on non-primary-key columns
+CREATE INDEX idx_Salesperson_Name ON Salesperson (Name);
+
+CREATE INDEX idx_Customer_Name ON Customer (Name);
 GO
 
 -- List tables in database to visually verify that all required tables were created successfully
@@ -60,11 +65,6 @@ SELECT TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_CATALOG='CMCS_Sales';
 GO
-
--- Create table indexes to support faster lookups on non-primary-key columns
-CREATE INDEX IDX_Salesperson_Name ON Salesperson (Name);
-
-CREATE INDEX IDX_Customer_Name ON Customer (Name);
 
 -- Insert table data
 INSERT INTO Salesperson (SalespersonID, Name, Age, Salary) VALUES
@@ -94,6 +94,7 @@ GO
 --
 -- Requirement 7 / Requirement 9
 --
+
 DECLARE @custName varchar(40);
 DECLARE @custId int;
 
@@ -109,10 +110,14 @@ SELECT DISTINCT S.Name
 FROM Salesperson S JOIN Orders O ON S.SalespersonID = O.SalespersonID
 WHERE O.CustomerID = @custId;
 
--- Names of salespeople who do not have an order with George
+-- Names of salespeople who do not have any order with George
 SELECT DISTINCT S.Name
-FROM Salesperson S JOIN Orders O ON S.SalespersonID = O.SalespersonID
-WHERE O.CustomerID != @custId;
+FROM Salesperson S
+WHERE S.SalespersonID NOT IN (
+	SELECT O.SalespersonID
+	FROM Orders O JOIN Salesperson S ON O.SalespersonID = S.SalespersonID
+	WHERE O.CustomerID = @custId
+);
 GO
 
 -- Names of salespeople with 2 or more orders
@@ -130,8 +135,49 @@ GO
 
 -- Name of the salesperson with the third highest salary
 SELECT T2.Name FROM (
-	SELECT S.Name, dense_rank() over (ORDER BY S.Salary DESC) AS rank
+	SELECT S.Name, dense_rank() OVER (ORDER BY S.Salary DESC) AS Rank
 	FROM Salesperson S
 ) T2
-WHERE rank = 3;
+WHERE Rank = 3;
+GO
+
+-- Create roll-up table
+CREATE TABLE BigOrders (
+	CustomerID int NOT NULL PRIMARY KEY,
+	TotalOrderValue money NOT NULL
+);
+
+-- Stored procedure to be run for initial table population. Also used in the trigger created below
+CREATE PROCEDURE uspInsertBigOrders
+AS
+	WITH cte_TotalOrderValue AS (
+		SELECT CustomerID, SUM(NumberOfUnits * CostOfUnit) AS TotalOrderValue
+		FROM Orders
+		GROUP BY CustomerID
+	)
+	INSERT INTO BigOrders
+		SELECT CustomerID, TotalOrderValue
+		FROM cte_TotalOrderValue
+		WHERE TotalOrderValue > 1000;
+
+-- Naive implementation of trigger to recalculate all total order values on insert, update, or delete.
+-- A more efficient implementation would only update affected rows by examining the contents of the inserted and deleted tables.
+CREATE TRIGGER trgAfterUpdateInsertOrDelete ON Orders
+AFTER INSERT, UPDATE, DELETE
+AS
+	EXEC uspInsertBigOrders;
+GO
+
+-- Insert customers whose total Amount across all orders is greater than 1000
+EXEC uspInsertBigOrders;
+GO
+
+-- Total Amount of orders for each month, ordered by year then month in descending order
+SELECT OrderYear, OrderMonth, SUM(OrderValue) AS TotalOrderValue
+FROM (
+	SELECT YEAR(OrderDate) AS OrderYear, MONTH(OrderDate) AS OrderMonth, OrderID, NumberOfUnits * CostOfUnit AS OrderValue
+	FROM Orders
+) T2
+GROUP BY OrderYear, OrderMonth
+ORDER BY OrderYear, OrderMonth DESC;
 GO

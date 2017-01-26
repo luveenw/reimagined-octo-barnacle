@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Integer\Exception\InvalidTriangleExceptionTest.cs" />
     <Compile Include="Integer\IntegerDivisorsTest.cs" />
     <Compile Include="Integer\MostCommonTest.cs" />
     <Compile Include="Integer\TriangleTest.cs" />

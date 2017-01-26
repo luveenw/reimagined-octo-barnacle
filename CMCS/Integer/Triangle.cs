@@ -7,10 +7,10 @@ namespace CMCS.Integer
     public class Triangle
     {
         // Number of sides in a triangle.
-        private static readonly int NumSides = 3;
+        private const int NumSides = 3;
 
         // Precision (number of digits after decimal point) for returned results.
-        private static readonly int Precision = 3;
+        private const int Precision = 3;
 
         /// <summary>
         /// Returns the area of the triangle formed by the specified sides, if they form a valid triangle.
@@ -34,7 +34,7 @@ namespace CMCS.Integer
         // Protected for testing purposes.
         protected static void Validate(int a, int b, int c)
         {
-            var sides = new List<int>(new int[] {a, b, c});
+            var sides = new List<int>(new[] {a, b, c});
 
             for (int i = 0; i < NumSides; i++)
             {

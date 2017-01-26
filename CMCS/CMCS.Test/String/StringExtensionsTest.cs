@@ -7,7 +7,7 @@ namespace CMCS.Test.String
     public class StringExtensionsTest
     {
         [Test]
-        public void NonNullOrEmptyInputTest()
+        public void NotNullOrEmptyInputTest()
         {
             Assert.IsFalse(" ".IsNullOrEmpty());
             Assert.IsFalse("a".IsNullOrEmpty());

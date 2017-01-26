@@ -6,11 +6,12 @@ namespace CMCS.Integer
     public class IntegerDivisors
     {
         /// <summary>
-        /// Returns a list of positive integers that divide the specified positive integer. Returns
-        /// an empty list if the specified number is not positive.
+        /// Determine the divisors of the specified integer.
         /// </summary>
         /// <param name="number">The number for which to find positive divisors.</param>
-        public List<int> DivisorsOf(int number)
+        /// <returns>A list of positive integers that divide <paramref name="number"/>, if it is positive. Otherwise,
+        /// returns an empty list.</returns>
+        public static List<int> DivisorsOf(int number)
         {
             var result = new List<int>();
 

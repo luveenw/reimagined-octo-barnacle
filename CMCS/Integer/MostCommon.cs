@@ -9,12 +9,20 @@ namespace CMCS.Integer
         /// </summary>
         /// <param name="arr">The integer array in which to find the most commonly occurring values.</param>
         /// <returns>An integer array containing the most commonly occurring values.</returns>
-        public static int[] findMostCommon(int[] arr)
+        public static int[] FindMostCommonIn(int[] arr)
         {
-            var counts = arr.GroupBy(i => i);
+            if (arr.Length == 0)
+            {
+                return arr;
+            }
+
+            var counts = arr.GroupBy(i => i).ToList();
             var maxCount = counts.Max(group => group.Count());
 
-            return counts.Where(group => group.Count() == maxCount).Select(group => group.Key).ToArray();
+            return counts
+                .Where(group => group.Count() == maxCount)
+                .Select(group => group.Key)
+                .ToArray();
         }
     }
 }
