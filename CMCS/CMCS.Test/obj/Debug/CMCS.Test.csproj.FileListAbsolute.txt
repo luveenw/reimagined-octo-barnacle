@@ -1,9 +1,0 @@
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\CMCS.Test.dll
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\CMCS.Test.pdb
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\CMCS.dll
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\nunit.framework.dll
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\CMCS.pdb
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\bin\Debug\nunit.framework.xml
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\obj\Debug\CMCS.Test.csprojResolveAssemblyReference.cache
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\obj\Debug\CMCS.Test.dll
-C:\Users\luvee\Documents\reimagined-octo-barnacle\CMCS\CMCS.Test\obj\Debug\CMCS.Test.pdb

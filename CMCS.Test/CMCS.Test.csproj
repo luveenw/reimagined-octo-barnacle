@@ -49,7 +49,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CMCS.csproj">
+    <ProjectReference Include="..\CMCS\CMCS.csproj">
       <Project>{845110D5-922B-4694-811B-7E5DA12ADB0E}</Project>
       <Name>CMCS</Name>
     </ProjectReference>
