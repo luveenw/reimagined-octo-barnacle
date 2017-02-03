@@ -1,0 +1,23 @@
+{
+  "name": "reimagined-octo-barnacle",
+  "homepage": "https://github.com/luveenw/reimagined-octo-barnacle",
+  "authors": [
+    "Luveen Wadhwani <luveenw@gmail.com>"
+  ],
+  "description": "CM JS requirements",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-ajax": "polymerelements/iron-ajax#~1.4.3",
+    "paper-spinner": "polymerelements/paper-spinner#^1.2.1",
+    "paper-button": "polymerelements/paper-button#^1.0.14"
+  }
+}
