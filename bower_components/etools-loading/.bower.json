@@ -1,0 +1,29 @@
+{
+  "name": "etools-loading",
+  "description": "loading spinner",
+  "version": "1.0.6",
+  "license": "https://github.com/unicef-polymer/etools-loading/blob/master/LICENSE.md",
+  "main": "etools-loading.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "paper-spinner": "PolymerElements/paper-spinner#^1.2.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.3.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "homepage": "https://github.com/unicef-polymer/etools-loading",
+  "_release": "1.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.6",
+    "commit": "6c8c77dc87fef355164ec265ef85f5a2b34fbe0d"
+  },
+  "_source": "https://github.com/unicef-polymer/etools-loading.git",
+  "_target": "^1.0.6",
+  "_originalSource": "unicef-polymer/etools-loading",
+  "_direct": true
+}

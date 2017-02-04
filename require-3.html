@@ -2,14 +2,26 @@
     <head>
         <title>CM JS dev, requirement 8</title>
 
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
         <!-- <link href="css/bootstrap.min.css" rel="stylesheet" media="screen"> -->
+        <!-- <link rel="import" href="bower_components/polymer/polymer.html"> -->
+        <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+        <!-- <link rel="import" href="bower_components/etools-loading/etools-loading.html"> -->
         <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
         <link rel="import" href="bower_components/paper-button/paper-button.html">
         <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
-        <link rel="import" href="bower_components/paper-styles/color.html">
+        <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+        <!-- <link rel="import" href="bower_components/paper-styles/color.html"> -->
+        <!-- <link rel="import" href="bower_components/font-roboto-local/roboto.html"> -->
     </head>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif, Helvetica;
+        }
+    </style>
     <body>
 
         <dom-module id="issues-app">
@@ -18,40 +30,56 @@
                     <div>
                         <!-- <input type="button" onclick="startLoading" />
                         <paper-button raised on-tap="toggleLoading">Load the current issues list</paper-button> -->
-                        <!-- <template is="dom-if" if={{!isLoading}}> -->
-                        <paper-button raised on-tap="toggleLoading">Load the current issues list</paper-button>
-                        <template is="dom-if" if="{{isLoading}}">
-                            <paper-spinner id="loadingIcon" active alt="Loading...">hello</paper-spinner>
+                        <template is="dom-if" if={{!isLoading}}>
+                            <paper-button raised on-tap="loadFromFile">Load the current issues list</paper-button>
                         </template>
-                        <!-- </template> -->
+                        <template is="dom-if" if={{isLoading}}>
+                            <span>Loading...<paper-spinner red active></paper-spinner></span>
+                        </template>
                     </div>
                     
                     <iron-ajax
-                         auto
-                         url="test.json"
-                         handle-as="json"
-                         on-request="handleRequest"
-                         on-response="handleResponse"
-                         on-error="onError"
-                         last-response="{{response}}">
+                        auto
+                        id="xhr"
+                        url="test.json"
+                        handle-as="json"
+                        on-request="handleRequest"
+                        on-response="handleResponse"
+                        on-error="handleError"
+                        last-response="{{response}}">
                      </iron-ajax>
 
-                    <div id="results">
+                    <div id="results" style="visibility: hidden;">
+<!--                         <template is="dom-if" if="{{isLoading}}">
+                            <etools-loading id="loadingIcon" active style="display: none;">Loading issues</etools-loading>
+                        </template>
+ -->
+
+                        <div style="width: 100; height: 100%;">
                         <!-- <dom-module id="result-rows"> -->
-                            <template is="dom-repeat" items="{{response}}">
-                                <div>ID: {{item.id}}</div>
-                                <div>Title: {{item.title}}</div>
-                                <div>Description: {{item.description}}</div>
-                                <div>Status: {{item.status}}</div>
-                                <div>{{item.updates.length}} updates</div>
+                            <template is="dom-if" if="{{!isLoading && !isLoadError}}">
+                                <div>
+                                    <h1>Results</h1>
+                                </div>
+
+                                <template is="dom-repeat" items="{{response}}" rendered-item-count="{{numIssues}}">
+                                    <div>ID: {{item.id}}</div>
+                                    <div>Title: {{item.title}}</div>
+                                    <div>Description: {{item.description}}</div>
+                                    <div>Status: {{item.status}}</div>
+                                    <div>{{item.updates.length}} updates</div>
+                                </template>
                             </template>
-                            <!-- <script type="text/javascript">
-                                Polymer({
-                                    is: 'result-rows'
-                                });
-                            </script> -->
-                        <!-- </dom-module> -->
-                        <!-- <result-rows></result-rows> -->
+
+                            <template is="dom-if" if="{{isLoadError}}">
+                                <div>Encountered an error while loading issues!</div>
+                            </template>
+
+                            <template is="dom-if" if="{{!isLoadError && !numIssues}}">
+                                <div>No issues! :)</div>
+                            </template>
+
+                        </div>
                     </div>
 
                     <div id="results-template" style="display:none">
@@ -80,19 +108,71 @@
             </template>
 
             <script type="text/javascript">
-                Polymer({
-                    is: 'issues-app',
+                (function() {
+                    Polymer({
+                        is: 'issues-app',
 
-                    isLoading: false,
+                        isLoading: false,
 
-                    ready: function() {
-                        this.isLoading = false;
-                    },
+                        isLoadError: false,
 
-                    toggleLoading: function(event) {
-                        this.isLoading = !this.isLoading;
-                    }
-                });
+                        ready: function() {
+                            this.isLoading = false;
+                        },
+
+                        toggleLoading: function(event) {
+                            this.isLoading = !this.isLoading;
+                        },
+
+                        loadFromFile: function(event) {
+                            // this.sleep(700).then(() => {
+                                // $(Polymer.dom(this.root).querySelector('#results')).fadeOut().css('visibility', 'hidden').css('display', '');
+                                // $(Polymer.dom(this.root).querySelector('#loadingIcon')).show();
+
+                                document.querySelector('#xhr').generateRequest();
+                            // });
+                        },
+
+                        // remove?
+                        sleep: function(time) {
+                            return new Promise((resolve) => setTimeout(resolve, time));
+                        },
+
+                        handleRequest: function() {
+                            $(Polymer.dom(this.root).querySelector('#results'))
+                            .fadeOut()
+                            .css('visibility', 'hidden')
+                            .css('display', '');
+
+                            this.isLoadError = false;
+                            this.toggleLoading();
+
+                            console.log('Loading issues from file... isLoading: %s', this.isLoading);
+                        },
+
+                        handleResponse: function() {
+                            this.sleep(750).then(() => {
+                                $(Polymer.dom(this.root).querySelector('#results')).css('visibility', 'visible').hide().fadeIn();
+
+                                this.toggleLoading();
+                                
+                                // $(Polymer.dom(this.root).querySelector('#loadingIcon')).show();
+                                console.log('Loaded! isLoading: %s, isLoadError', this.isLoading, this.isLoadError);
+                            });
+                        },
+
+                        handleError: function() {
+                            this.isLoadError = true;
+                            this.toggleLoading();
+
+                            $(Polymer.dom(this.root).querySelector('#results')).css('visibility', 'visible').hide().fadeIn();
+                            
+
+
+                            console.log('Could not load issues! isLoading: %s, isLoadError: %s', this.isLoading, this.isLoadError);
+                        }
+                    });
+                })();
             </script>
         </dom-module>
 
